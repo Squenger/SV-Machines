@@ -111,7 +111,7 @@ def get_line_plot(
         y_upper_limit,
         color="black",
         alpha=0.2,
-        label="±epsilon band",
+        label="+/-epsilon band",
     )
     ax.scatter(
         x_dataset, y_dataset, marker="x", s=8, color="blue", label="Line dataset points"
