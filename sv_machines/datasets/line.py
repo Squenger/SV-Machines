@@ -4,7 +4,14 @@
 import numpy as np
 
 
-def get_line_dataset(slope: float, offset: float, epsilon: float, x_range: tuple[float,float] = (0,10), num_points: int = 1000, epsilon_strict: bool = False) -> tuple[np.ndarray, np.ndarray]:
+def get_line_dataset(
+    slope: float,
+    offset: float,
+    epsilon: float,
+    x_range: tuple[float, float] = (0, 10),
+    num_points: int = 1000,
+    epsilon_strict: bool = False,
+) -> tuple[np.ndarray, np.ndarray]:
     """Generates a dataset of points in a circle shape.
 
     Parameters
@@ -21,7 +28,7 @@ def get_line_dataset(slope: float, offset: float, epsilon: float, x_range: tuple
         Number of points to generate.
     epsilon_strict: bool
         If True, noise is generated uniformly in the range [-epsilon, epsilon].
-        Therefore the datapoints will not be outside of the +/- epsilon band 
+        Therefore the datapoints will not be outside of the +/- epsilon band
         around the line. If False, noise is generated from a normal distribution
         with mean 0 and standard deviation epsilon around the "true line", with
         therefore the possibilitw that some points are outside the +/- epsilon
@@ -37,7 +44,7 @@ def get_line_dataset(slope: float, offset: float, epsilon: float, x_range: tuple
     x_min, x_max = x_range
     if x_min >= x_max:
         raise ValueError("x_range min must be less than max.")
-    
+
     x_vals = np.random.uniform(x_min, x_max, size=num_points)
     y_vals = slope * x_vals + offset
     if epsilon_strict:
