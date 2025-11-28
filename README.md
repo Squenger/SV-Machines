@@ -1,4 +1,4 @@
-# Getting started
+# Getting started :hugs:
 
 1. Clone this repository in a folder.
 2. Install python and [poetry](https://python-poetry.org/docs/#installation).

@@ -1,39 +1,33 @@
-"""Generates a dataset of points in a line shape for regression task."""
+"""Generates non linear function dataset."""
 
 # Third party imports
 import numpy as np
 import matplotlib.pyplot as plt
 
 
-def linear_function(x: np.ndarray, slope: float, offset: float) -> np.ndarray:
-    """Computes the linear function y = slope * x + offset.
+def function_a(x: np.ndarray) -> np.ndarray:
+    """Computes the value of function A at given x values.
 
     Parameters
     ----------
     x : np.ndarray
         Input x values.
-    slope : float
-        Slope of the line.
-    offset : float
-        Offset of the line.
 
     Returns
     -------
     np.ndarray
         Computed y values.
     """
-    return slope * x + offset
+    return x * np.log(x) * np.cos(x)
 
 
-def get_line_dataset(
-    slope: float,
-    offset: float,
+def get_function_a_dataset(
     epsilon: float,
-    x_range: tuple[float, float] = (0, 10),
+    x_range: tuple[float, float] = (0.5, 10),
     num_points: int = 1000,
     epsilon_strict: bool = False,
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Generates a dataset of points in a circle shape.
+    """Generates a dataset for a linear function of a given set.
 
     Parameters
     ----------
@@ -65,9 +59,11 @@ def get_line_dataset(
     x_min, x_max = x_range
     if x_min >= x_max:
         raise ValueError("x_range min must be less than max.")
+    if x_min <= 0:
+        raise ValueError("x_range min must be greater than 0 for log function.")
 
     x_vals = np.random.uniform(x_min, x_max, size=num_points)
-    y_vals = linear_function(x_vals, slope, offset)
+    y_vals = function_a(x_vals)
     if epsilon_strict:
         y_vals += np.random.uniform(-epsilon, epsilon, size=y_vals.shape)
     else:
@@ -76,11 +72,9 @@ def get_line_dataset(
     return x_vals, y_vals
 
 
-def get_line_plot(
+def get_function_a_plot(
     x_dataset: np.ndarray,
     y_dataset: np.ndarray,
-    slope: float,
-    offset: float,
     epsilon: float,
     with_true_function: bool = False,
 ) -> tuple[plt.Figure, plt.Axes]:
@@ -109,24 +103,24 @@ def get_line_plot(
         Handle of the matplotlib axes.
     """
     # Define
-    x_line_ordered = np.linspace(min(x_dataset), max(x_dataset), 1000)
-    y_true = linear_function(x_line_ordered, slope, offset)
+    x_ordered = np.linspace(min(x_dataset), max(x_dataset), 50)
+    y_true = function_a(x_ordered)
     y_upper_limit = y_true + epsilon
-    y_lower_limit = y_true + offset - epsilon
+    y_lower_limit = y_true - epsilon
 
     fig, ax = plt.subplots(1, 1)
     if with_true_function:
         ax.plot(
-            x_line_ordered,
+            x_ordered,
             y_true,
             color="red",
             linestyle="-",
             label="True y values (without noise)",
         )
-        # ax.plot(x_line_ordered, y_upper_limit, color='green', linestyle='--', linewidth=2, label='True y values + epsilon')
-        # ax.plot(x_line_ordered, y_lower_limit, color='green', linestyle='--', linewidth=2, label='True y values - epsilon')
+        # ax.plot(x_ordered, y_upper_limit, color='green', linestyle='--', linewidth=2, label='True y values + epsilon')
+        # ax.plot(x_ordered, y_lower_limit, color='green', linestyle='--', linewidth=2, label='True y values - epsilon')
     ax.fill_between(
-        x_line_ordered,
+        x_ordered,
         y_lower_limit,
         y_upper_limit,
         color="black",
