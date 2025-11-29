@@ -183,7 +183,7 @@ def get_line_plot(
         y_upper_limit,
         color="black",
         alpha=0.1,
-        label="+/-epsilon band",
+        label="+/-epsilon band of true function",
     )
     if outliers_indexes is not None:
         ax.scatter(
